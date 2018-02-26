@@ -2,23 +2,34 @@
 
 
 import os
+import argparse
 
 # For debug purpose
 LOCAL_AUTOMAKE_VERSION_FILE = "local_automake_version.txt";
 GPL_AUTOMAKE_VERSION_FILE = "aclocal.m4";
 
 def get_local_automake_version():
-  #local_host_automake_version = os.popen("automake --version").readline().rstrip("\n").split(" ")[3]
+  version = os.popen("automake --version").readline().rstrip("\n").split(" ")[3]
 
 
   # windows debug code
-  local_host_automake_file = open(LOCAL_AUTOMAKE_VERSION_FILE, "r");
+  #local_host_automake_file = open(LOCAL_AUTOMAKE_VERSION_FILE, "r");
   #print(local_host_automake_string.readline())
 
-  version = local_host_automake_file.readline().rstrip("\n").split(" ")[3];
+  #version = local_host_automake_file.readline().rstrip("\n").split(" ")[3];
   #print version;
 
   return version;
+
+def get_gpl_file_path():
+  
+  parser = argparse.ArgumentParser();
+
+  parser.add_argument("--file", "-f", type=str, required=True);
+  args = parser.parse_args();
+
+  return args.file;
+
 
 def get_gpl_automake_version():
 
@@ -27,7 +38,7 @@ def get_gpl_automake_version():
     return 0;
 
   # windows debug code
-  gpl_automake_file = open(GPL_AUTOMAKE_VERSION_FILE, "r");
+  gpl_automake_file = open(get_gpl_file_path(), "r");
   #print(local_host_automake_string.readline())
 
   version_array = gpl_automake_file.readline().rstrip("\n").split(" ");
@@ -65,6 +76,7 @@ def Run():
   print('##     Start Run()       ##');
   print('###########################');
 
+
   # used to get the host automake version
   local_host_automake_version = get_local_automake_version();
 
@@ -80,7 +92,4 @@ def Run():
 
 if __name__ == '__main__':
   Ret = Run();
-  print('###########################');
-  print('##     Test Complete     ##');
-  print('###########################');
   print Ret;
